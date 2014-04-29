@@ -1,7 +1,9 @@
 package config
 
 import (
+  "io"
   "fmt"
+  "os/exec"
   "strings"
   "net/http"
   "github.com/andrerocker/martini"
@@ -24,11 +26,19 @@ func (self CoreService) BindUrl() string {
   return fmt.Sprintf("%s:%d", self.Bind, self.Port)
 }
 
+func executeCommand(output io.Writer, cmd string) {
+  command := exec.Command("/usr/bin/bash", "-c", fmt.Sprintf("%s", cmd))
+  command.Stdout = output
+  command.Stderr = output
+  command.Run()
+}
+
 func genericResponse(paramName, command string) func(martini.Params, http.ResponseWriter, *http.Request) {
   return func(params martini.Params, res http.ResponseWriter, req *http.Request) {
-    compiled := fmt.Sprintf("%s - %s", command, params[paramName])
+    compiled := strings.Replace(command, fmt.Sprintf("{%s}", paramName), params[paramName], -1)
+    fmt.Println(compiled)
     res.WriteHeader(200)
-    fmt.Fprintf(res, compiled)
+    executeCommand(res, compiled)
   }
 }
 
