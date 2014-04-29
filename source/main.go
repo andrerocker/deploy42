@@ -1,19 +1,16 @@
 package main
 
 import (
-  "log"
   "net/http"
   "./util/config"
   "github.com/andrerocker/martini"
 )
 
 func main() {
-  core := config.NewCoreService()
   martini := martini.Classic()
+  service := config.NewCoreService()
+  commands := config.NewServiceCommands()
 
-  martini.Add("GET", "/andre", func() string {
-    return "MALLLCOLLLM"
-  })
-
-  log.Fatal(http.ListenAndServe(core.BindUrl(), martini))
+  commands.DrawRoutes(martini)
+  http.ListenAndServe(service.BindUrl(), martini)
 }

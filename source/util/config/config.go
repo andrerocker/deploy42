@@ -5,11 +5,6 @@ import (
   "gopkg.in/yaml.v1"
 )
 
-type Configuration struct {
-  Service map[string]interface{}
-  Commands map[string][]map[string]interface{}
-}
-
 func unmarshal() Configuration {
   deploy := Configuration {}
   data, _ := ioutil.ReadFile("deploy.yml")
@@ -25,6 +20,6 @@ func NewCoreService() CoreService {
   return CoreService { service["port"].(int), service["bind"].(string) }
 }
 
-func NewCommands() []Command {
-
+func NewServiceCommands() CommandList {
+  return config.Commands
 }
