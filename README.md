@@ -1,8 +1,8 @@
 deploy.go
 =========
 
-* https://github.com/andrerocker/deploy.go
+https://github.com/andrerocker/deploy.go
 
-### Command as a Service :p
+### Description
 
-* Export a list of Commands over HTTP using a simple YAML File 
+Draft of a "Command as a Service", the main idea is export a list of "Commands over HTTP" described on a simple YAML File.
