@@ -1,55 +1,62 @@
 package config
 
 import (
-  "io"
-  "fmt"
-  "os/exec"
-  "strings"
-  "net/http"
-  "github.com/andrerocker/martini"
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"os/exec"
+	"strings"
 )
 
 type Command map[string]interface{}
 type CommandList map[string][]Command
 
 type CoreService struct {
-  Port int
-  Bind string
+	Port int
+	Bind string
 }
 
 type Configuration struct {
-  Service Command
-  Commands CommandList
+	Service  Command
+	Commands CommandList
 }
 
 func (self CoreService) BindUrl() string {
-  return fmt.Sprintf("%s:%d", self.Bind, self.Port)
+	return fmt.Sprintf("%s:%d", self.Bind, self.Port)
 }
 
-func executeCommand(output io.Writer, cmd string) {
-  command := exec.Command("/usr/bin/bash", "-c", fmt.Sprintf("%s", cmd))
-  command.Stdout = output
-  command.Stderr = output
-  command.Run()
+type FlushedWriter struct {
+	gin.ResponseWriter
 }
 
-func genericResponse(paramName, command string) func(martini.Params, http.ResponseWriter, *http.Request) {
-  return func(params martini.Params, res http.ResponseWriter, req *http.Request) {
-    compiled := strings.Replace(command, fmt.Sprintf("{%s}", paramName), params[paramName], -1)
-    fmt.Println(compiled)
-    res.WriteHeader(200)
-    executeCommand(res, compiled)
-  }
+func (self FlushedWriter) Write(message []byte) (int, error) {
+	wrote, err := self.ResponseWriter.Write(message)
+	self.ResponseWriter.Flush()
+	return wrote, err
 }
 
-func (self CommandList) DrawRoutes(router *martini.ClassicMartini) {
-  for endpoint, commands := range self {
-    formattedEndpoint := fmt.Sprintf("/%s/:%s", endpoint, endpoint)
+func executeCommand(output FlushedWriter, cmd string) {
+	command := exec.Command("/bin/bash", "-c", fmt.Sprintf("%s", cmd))
+	command.Stdout = output
+	command.Stderr = output
+	command.Run()
+}
 
-    for _, verbs := range commands {
-      for verb, command := range verbs {
-        router.Add(strings.ToUpper(verb), formattedEndpoint, genericResponse(endpoint, command.(string)))
-      }
-    }
-  }
+func genericResponse(paramName, command string) func(*gin.Context) {
+	return func(context *gin.Context) {
+		compiled := strings.Replace(command, fmt.Sprintf("{%s}", paramName), context.Params.ByName(paramName), -1)
+		fmt.Println(compiled)
+		executeCommand(FlushedWriter{context.Writer}, compiled)
+	}
+}
+
+func (self CommandList) DrawRoutes(router *gin.Engine) {
+	for endpoint, commands := range self {
+		formattedEndpoint := fmt.Sprintf("/%s/:%s", endpoint, endpoint)
+
+		for _, verbs := range commands {
+			for verb, command := range verbs {
+				router.Handle(strings.ToUpper(verb), formattedEndpoint, []gin.HandlerFunc{genericResponse(endpoint, command.(string))})
+			}
+		}
+	}
 }

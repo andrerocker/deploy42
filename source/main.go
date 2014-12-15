@@ -1,16 +1,15 @@
 package main
 
 import (
-  "net/http"
-  "./util/config"
-  "github.com/andrerocker/martini"
+	"./util/config"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-  martini := martini.Classic()
-  service := config.NewCoreService()
-  commands := config.NewServiceCommands()
+	http := gin.Default()
+	service := config.NewCoreService()
+	commands := config.NewServiceCommands()
 
-  commands.DrawRoutes(martini)
-  http.ListenAndServe(service.BindUrl(), martini)
+	commands.DrawRoutes(http)
+	http.Run(service.BindUrl())
 }
