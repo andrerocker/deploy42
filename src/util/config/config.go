@@ -1,25 +1,26 @@
 package config
 
 import (
-  "io/ioutil"
-  "gopkg.in/yaml.v1"
+	"gopkg.in/yaml.v1"
+	"io/ioutil"
 )
 
-func unmarshal() Configuration {
-  deploy := Configuration {}
-  data, _ := ioutil.ReadFile("deploy.yml")
+var config Configuration
 
-  yaml.Unmarshal(data, &deploy)
-  return deploy
+func unmarshal(configFile string) Configuration {
+	deploy := Configuration{}
+	data, _ := ioutil.ReadFile(configFile)
+
+	yaml.Unmarshal(data, &deploy)
+	return deploy
 }
 
-var config Configuration = unmarshal()
-
-func NewCoreService() CoreService {
-  service := config.Service
-  return CoreService { service["port"].(int), service["bind"].(string) }
+func NewCoreService(configFile string) CoreService {
+	config := unmarshal(configFile)
+	service := config.Service
+	return CoreService{service["port"].(int), service["bind"].(string)}
 }
 
 func NewServiceCommands() CommandList {
-  return config.Commands
+	return config.Commands
 }
