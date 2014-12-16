@@ -29,7 +29,10 @@ func (self FlushedWriter) Write(message []byte) (int, error) {
 
 func genericResponse(paramName, commandTemplate string) func(*gin.Context) {
 	return func(context *gin.Context) {
-		compiled := strings.Replace(commandTemplate, fmt.Sprintf("{%s}", paramName), context.Params.ByName(paramName), -1)
+		target := fmt.Sprintf("{%s}", paramName)
+		content := context.Params.ByName(paramName)
+		compiled := strings.Replace(commandTemplate, target, content, -1)
+
 		command.ExecuteCommand(FlushedWriter{context.Writer}, compiled)
 	}
 }
@@ -40,7 +43,8 @@ func (self Engine) Draw() {
 
 		for _, verbs := range commands {
 			for verb, command := range verbs {
-				handler := []gin.HandlerFunc{genericResponse(endpoint, command.(string))}
+				specialistHandler := genericResponse(endpoint, command.(string))
+				handler := []gin.HandlerFunc{specialistHandler}
 				self.router.Handle(strings.ToUpper(verb), formattedEndpoint, handler)
 			}
 		}
