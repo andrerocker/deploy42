@@ -5,4 +5,4 @@ https://github.com/andrerocker/deploy.go
 
 ### Description
 
-Draft of a "Command as a Service", the main idea is export a list of "Commands over HTTP" described on a YAML File.
+- Read a YAML and export this as a 'Command as a Service' :p
