@@ -3,56 +3,45 @@ package engine
 import (
 	"./command"
 	"./config"
+	"./http"
+	"./http/gin"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"strings"
 )
 
 type Engine struct {
-	configx config.Configuration
-	router  *gin.Engine
-}
-
-type FlushedWriter struct {
-	gin.ResponseWriter
+	http   http.Engine
+	config config.Configuration
 }
 
 func New() Engine {
-	return Engine{config.New(), gin.Default()}
-}
-
-func (self FlushedWriter) Write(message []byte) (int, error) {
-	wrote, err := self.ResponseWriter.Write(message)
-	self.ResponseWriter.Flush()
-	return wrote, err
-}
-
-func genericResponse(paramName, commandTemplate string) func(*gin.Context) {
-	return func(request http.Request) {
-		target := fmt.Sprintf("{%s}", paramName)
-		content := request.Parameter(paramName)
-		compiled := strings.Replace(commandTemplate, target, content, -1)
-
-		command.ExecuteCommand(FlushedWriter{context.Writer}, compiled)
-	}
+	return Engine{gin.New(), config.New()}
 }
 
 func (self Engine) Draw() {
-	for endpoint, commands := range self.configx.Commands {
+	for endpoint, commands := range self.config.Commands {
 		formattedEndpoint := fmt.Sprintf("/%s/:%s", endpoint, endpoint)
 
 		for _, verbs := range commands {
 			for verb, command := range verbs {
-				specialistHandler := genericResponse(endpoint, command.(string))
-				handler := []gin.HandlerFunc{specialistHandler}
-				self.router.Handle(strings.ToUpper(verb), formattedEndpoint, handler)
+				wrappedHandler := wrapValuesHandler(endpoint, command.(string))
+				self.http.Register(verb, formattedEndpoint, wrappedHandler)
 			}
 		}
 	}
 }
 
 func (self Engine) Start() {
-	daemon := self.configx.Daemon
+	daemon := self.config.Daemon
 	listen := daemon.BindUrl()
-	self.router.Run(listen)
+	self.http.Start(listen)
+}
+
+func wrapValuesHandler(paramName, commandTemplate string) func(http.Request) {
+	return func(request http.Request) {
+		target := fmt.Sprintf("{%s}", paramName)
+		content := request.Parameter(paramName)
+		compiled := strings.Replace(commandTemplate, target, content, -1)
+		command.ExecuteCommand(request.Writer(), compiled)
+	}
 }
