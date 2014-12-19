@@ -28,9 +28,9 @@ func (self FlushedWriter) Write(message []byte) (int, error) {
 }
 
 func genericResponse(paramName, commandTemplate string) func(*gin.Context) {
-	return func(context *gin.Context) {
+	return func(request http.Request) {
 		target := fmt.Sprintf("{%s}", paramName)
-		content := context.Params.ByName(paramName)
+		content := request.Parameter(paramName)
 		compiled := strings.Replace(commandTemplate, target, content, -1)
 
 		command.ExecuteCommand(FlushedWriter{context.Writer}, compiled)

@@ -14,4 +14,4 @@ commands:
       delete: kill -9 {process}
 
   log:
-    - get: tail -f kdoaksdoaksod
+    - get: tail -f {log}
