@@ -4,9 +4,9 @@ daemon:
 
 commands:
   pkg:
-    - get: apt-cache show kdaoskdoasodas
-      put: apt-get update && apt-get install -y kdaoskdoasd
-      delete: apt-get remove --purge kdoaksodsaod
+    - get: apt-cache show {pkg}
+      put: apt-get update && apt-get install -y {pkg}
+      delete: apt-get remove --purge {pkg}
 
   process:
     - get: ps -ef | grep {process}
