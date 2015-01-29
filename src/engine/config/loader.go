@@ -9,25 +9,24 @@ import (
 
 func YAMLoad(configFile string) Configuration {
 	cfg := loadBase(configFile)
-	configFiles := cfg.Daemon.Load
+	mergo.Merge(&cfg.Commands, loadExtensionList(cfg.Daemon.Load))
+
+	return cfg
+}
+
+func loadExtensionList(configFiles []string) CommandList {
+	commandList := make(CommandList)
 
 	if configFiles != nil {
 		for _, currentConfigFile := range configFiles {
-			mergo.Merge(&cfg.Commands, loadExtension(currentConfigFile))
+			mergo.Merge(&commandList, loadExtensionGlob(currentConfigFile))
 		}
 	}
 
-	return cfg
+	return commandList
 }
 
-func loadBase(configFile string) Configuration {
-	cfg := Configuration{}
-	data, _ := ioutil.ReadFile(configFile)
-	yaml.Unmarshal(data, &cfg)
-	return cfg
-}
-
-func loadExtension(configFile string) CommandList {
+func loadExtensionGlob(configFile string) CommandList {
 	files, _ := filepath.Glob(configFile)
 	commandList := make(CommandList)
 
@@ -37,4 +36,11 @@ func loadExtension(configFile string) CommandList {
 	}
 
 	return commandList
+}
+
+func loadBase(configFile string) Configuration {
+	cfg := Configuration{}
+	data, _ := ioutil.ReadFile(configFile)
+	yaml.Unmarshal(data, &cfg)
+	return cfg
 }
