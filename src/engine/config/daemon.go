@@ -5,7 +5,7 @@ import "fmt"
 type Daemon struct {
 	Port int
 	Bind string
-	Load string
+	Load []string
 }
 
 func (self Daemon) BindUrl() string {
