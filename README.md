@@ -15,6 +15,9 @@ Based on a simple yaml
 daemon:
   bind: 127.0.0.1
   port: 8888
+  load:
+    - /var/www/*/config/deploy.yml
+    - /home/*/routines/deploy.yml
 
 commands:
   process:
@@ -54,7 +57,6 @@ Completed 200 OK in 97ms (Views: 94.6ms | ActiveRecord: 1.0ms)
 ##### TODO List
 
 - Use a better implementation of argparse
-- Add support to "include: /path/to/glob/deploy.yml"
 - Add support to before filters
 - Add debian package and bricky
 - Add experients with commands using - and resquest body as a arbitrary content
