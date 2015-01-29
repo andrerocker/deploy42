@@ -17,7 +17,7 @@ daemon:
   port: 8888
   load:
     - /var/www/*/config/deploy.yml
-    - /home/*/routines/deploy.yml
+      /home/*/routines/deploy.yml
 
 commands:
   process:
