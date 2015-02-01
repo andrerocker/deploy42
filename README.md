@@ -60,4 +60,3 @@ Completed 200 OK in 97ms (Views: 94.6ms | ActiveRecord: 1.0ms)
 - Add support to before filters
 - Add debian package and bricky
 - Add experients with commands using - and resquest body as a arbitrary content
-- Add a better implementation of command (process never end bug)
