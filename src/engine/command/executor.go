@@ -1,26 +1,27 @@
 package command
 
 import (
-	"fmt"
 	"io"
 	"os/exec"
 )
 
-func ExecuteCommand(output io.Writer, cmd string) {
-	command, _ := composedExecuteCommand(output, cmd)
+func ExecuteCommand(input io.Reader, output io.Writer, cmd string) {
+	command, _ := composedExecuteCommand(input, output, cmd)
 	command.Run()
 }
 
-func basicExecuteCommand(output io.Writer, cmd string) (*exec.Cmd, error) {
-	command := exec.Command("/bin/bash", "-c", fmt.Sprintf("%s", cmd))
+func basicExecuteCommand(input io.Reader, output io.Writer, cmd string) (*exec.Cmd, error) {
+	command := exec.Command("/bin/bash", "-c", cmd)
 	command.Stdout = output
 	command.Stderr = output
 
 	return command, nil
 }
 
-func composedExecuteCommand(requestOutput io.Writer, cmd string) (*exec.Cmd, error) {
-	command := exec.Command("/bin/bash", "-c", fmt.Sprintf("%s", cmd))
+func composedExecuteCommand(input io.Reader, requestOutput io.Writer, cmd string) (*exec.Cmd, error) {
+	command := exec.Command("/bin/bash", "-c", cmd)
+	command.Stdin = input
+
 	commandOutput, err := command.StdoutPipe()
 	go supervisor(command, requestOutput, commandOutput)
 

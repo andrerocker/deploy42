@@ -13,6 +13,10 @@ func NewRequest(context *gin.Context) GinRequest {
 	return GinRequest{context}
 }
 
+func (self GinRequest) Reader() io.Reader {
+	return self.context.Request.Body
+}
+
 func (self GinRequest) Writer() io.Writer {
 	return Flushed(self.context.Writer)
 }

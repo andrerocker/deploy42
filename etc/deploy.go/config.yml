@@ -17,3 +17,6 @@ commands:
 
   log:
     - get: tail -f {log}
+
+  echo:
+    - put: cat -

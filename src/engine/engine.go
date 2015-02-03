@@ -42,6 +42,6 @@ func wrapValuesHandler(paramName, commandTemplate string) func(http.Request) {
 		target := fmt.Sprintf("{%s}", paramName)
 		content := request.Parameter(paramName)
 		compiled := strings.Replace(commandTemplate, target, content, -1)
-		command.ExecuteCommand(request.Writer(), compiled)
+		command.ExecuteCommand(request.Reader(), request.Writer(), compiled)
 	}
 }

@@ -11,5 +11,6 @@ type Engine interface {
 
 type Request interface {
 	Writer() io.Writer
+	Reader() io.Reader
 	Parameter(string) string
 }

@@ -27,6 +27,10 @@ commands:
 
   log:
     - get: tail -f {log}
+
+  echo:
+    - put: cat -
+
 ```
 
 You can do this
@@ -53,10 +57,13 @@ Processing by DocumentController#show as HTML
 Completed 200 OK in 97ms (Views: 94.6ms | ActiveRecord: 1.0ms)
 ```
 
+```console
+$ echo "Andre Master of Universe" | curl -s -T - http://server:8888/echo/yeah
+Andre Master of Universe
+```
 
 ##### TODO List
 
 - Use a better implementation of argparse
 - Add support to before filters
 - Add debian package and bricky
-- Add experients with commands using - and resquest body as a arbitrary content
