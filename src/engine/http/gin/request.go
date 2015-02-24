@@ -24,3 +24,7 @@ func (self GinRequest) Writer() io.Writer {
 func (self GinRequest) Parameter(name string) string {
 	return self.context.Params.ByName(name)
 }
+
+func (self GinRequest) Abort(code int) {
+	self.context.Abort(code)
+}

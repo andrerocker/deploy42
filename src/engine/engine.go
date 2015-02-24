@@ -18,6 +18,10 @@ func New() Engine {
 	return Engine{gin.New(), config.New()}
 }
 
+func (self Engine) Use(filter http.Filter) {
+	self.http.Use(filter)
+}
+
 func (self Engine) Draw() {
 	for endpoint, commands := range self.config.Commands {
 		formattedEndpoint := fmt.Sprintf("/%s/:%s", endpoint, endpoint)

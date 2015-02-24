@@ -18,6 +18,10 @@ func (self GinAdapter) Start(bindUrl string) {
 	self.engine.Run(bindUrl)
 }
 
+func (self GinAdapter) Use(filter http.Filter) {
+	self.engine.Use(func(context *gin.Context) { filter(NewRequest(context)) })
+}
+
 func (self GinAdapter) Register(method, endpoint string, handler http.Handler) {
 	adapted := self.buildHandler(handler)
 	self.engine.Handle(strings.ToUpper(method), endpoint, []gin.HandlerFunc{adapted})
