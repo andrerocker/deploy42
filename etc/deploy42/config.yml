@@ -2,7 +2,7 @@ daemon:
   bind: 127.0.0.1
   port: 8888
   load:
-    - tmp/*/config/deploy.yml
+    - /etc/deploy42/conf.d/*.yml
 
 commands:
   pkg:

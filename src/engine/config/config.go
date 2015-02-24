@@ -14,7 +14,7 @@ func New() Configuration {
 }
 
 func parseCommandLineArgs() string {
-	configFile := flag.String("config", "deploy.yml", "configuration file")
+	configFile := flag.String("config", "deploy42.yml", "configuration file")
 	flag.Parse()
 	return *configFile
 }

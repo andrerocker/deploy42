@@ -1,7 +1,7 @@
-deploy.go
+deploy42
 =========
 
-https://github.com/andrerocker/deploy.go
+https://github.com/andrerocker/deploy42
 
 ### Description
 
@@ -16,8 +16,8 @@ daemon:
   bind: 127.0.0.1
   port: 8888
   load:
-    - /var/www/*/config/deploy.yml
-    - /home/*/routines/deploy.yml
+    - /var/www/*/config/deploy42.yml
+    - /home/*/routines/deploy42.yml
 
 commands:
   process:
