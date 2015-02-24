@@ -67,3 +67,9 @@ Andre Master of Universe
 - Use a better implementation of argparse
 - Add support to before filters
 - Add debian package and bricky
+
+##### Running locally
+
+- dependencies: make and go1.4+
+- run: just execute 'make' (at the first time will start slowly (fetching dependencies))
+- have a fun!!! \o/
