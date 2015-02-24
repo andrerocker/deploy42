@@ -71,4 +71,5 @@ Andre Master of Universe
 ##### Running locally
 
 - dependencies: make and go1.4+
+- run: just run "make"
 - have a fun!!! \o/
