@@ -16,8 +16,8 @@ daemon:
   bind: 127.0.0.1
   port: 8888
   load:
+    - /etc/deploy42/config.d/*.yml
     - /var/www/*/config/deploy42.yml
-    - /home/*/routines/deploy42.yml
 
 commands:
   process:
