@@ -71,5 +71,4 @@ Andre Master of Universe
 ##### Running locally
 
 - dependencies: make and go1.4+
-- run: just execute 'make' (at the first time will start slowly (fetching dependencies))
 - have a fun!!! \o/

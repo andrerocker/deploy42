@@ -26,5 +26,6 @@ func (self GinRequest) Parameter(name string) string {
 }
 
 func (self GinRequest) Abort(code int) {
-	self.context.Abort(code)
+	self.context.String(code, "unauthorized")
+	self.context.Abort()
 }

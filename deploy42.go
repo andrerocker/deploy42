@@ -1,11 +1,11 @@
-package engine
+package deploy42
 
 import (
-	"./command"
-	"./config"
-	"./http"
-	"./http/gin"
 	"fmt"
+	"github.com/andrerocker/deploy42/command"
+	"github.com/andrerocker/deploy42/config"
+	"github.com/andrerocker/deploy42/http"
+	"github.com/andrerocker/deploy42/http/gin"
 	"strings"
 )
 

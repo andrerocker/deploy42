@@ -1,7 +1,7 @@
 package gin
 
 import (
-	"../../http"
+	"github.com/andrerocker/deploy42/http"
 	"github.com/gin-gonic/gin"
 	"strings"
 )
