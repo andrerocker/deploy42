@@ -24,7 +24,7 @@ func (self Engine) Use(filter http.Filter) {
 
 func (self Engine) Draw() {
 	for endpoint, commands := range self.config.Commands {
-		formattedEndpoint := fmt.Sprintf("/%s/:%s", endpoint, endpoint)
+		formattedEndpoint := fmt.Sprintf("/%s/*%s", endpoint, endpoint)
 
 		for _, verbs := range commands {
 			for verb, command := range verbs {
