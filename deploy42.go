@@ -14,8 +14,8 @@ type Engine struct {
 	config config.Configuration
 }
 
-func New() Engine {
-	return Engine{gin.New(), config.New()}
+func New(configFile string) Engine {
+	return Engine{gin.New(), config.New(configFile)}
 }
 
 func (self Engine) Use(filter http.Filter) {

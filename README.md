@@ -64,8 +64,6 @@ Andre Master of Universe
 
 ##### TODO List
 
-- Use a better implementation of argparse
-- Add support to before filters
 - Add debian package and bricky
 
 ##### Running locally
