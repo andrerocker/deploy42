@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/alecthomas/kingpin"
 	"github.com/andrerocker/deploy42"
+	"gopkg.in/alecthomas/kingpin.v1"
 )
 
 var (
