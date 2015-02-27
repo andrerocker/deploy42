@@ -21,8 +21,15 @@ func (self GinRequest) Writer() io.Writer {
 	return Flushed(self.context.Writer)
 }
 
-func (self GinRequest) Parameter(name string) string {
+func (self GinRequest) ContextParameter(name string) string {
 	return self.context.Params.ByName(name)
+}
+
+func (self GinRequest) RequestParameter(name string) string {
+	request := self.context.Request
+	request.ParseForm()
+
+	return request.Form.Get(name)
 }
 
 func (self GinRequest) Abort(code int) {

@@ -44,7 +44,7 @@ func (self Engine) Start() {
 func wrapValuesHandler(paramName, commandTemplate string) func(http.Request) {
 	return func(request http.Request) {
 		target := fmt.Sprintf("{%s}", paramName)
-		content := request.Parameter(paramName)
+		content := request.ContextParameter(paramName)
 		compiled := strings.Replace(commandTemplate, target, content, -1)
 		command.ExecuteCommand(request.Reader(), request.Writer(), compiled)
 	}

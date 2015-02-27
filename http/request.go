@@ -14,7 +14,8 @@ type Request interface {
 	Abort(int)
 	Writer() io.Writer
 	Reader() io.Reader
-	Parameter(string) string
+	ContextParameter(string) string
+	RequestParameter(string) string
 }
 
 type Filter func(Request)
