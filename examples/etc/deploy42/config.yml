@@ -20,3 +20,9 @@ commands:
 
   echo:
     - put: cat -
+
+  time:
+    - get: date
+
+  calendar:
+    - get: cal
