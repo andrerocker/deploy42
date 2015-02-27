@@ -14,6 +14,13 @@ func YAMLoad(configFile string) Configuration {
 	return cfg
 }
 
+func SimpleYAMLoad(configFile string) map[string]string {
+	config := make(map[string]string)
+	content, _ := ioutil.ReadFile(configFile)
+	yaml.Unmarshal(content, &config)
+	return config
+}
+
 func loadExtensionList(configFiles []string) CommandList {
 	commandList := make(CommandList)
 
