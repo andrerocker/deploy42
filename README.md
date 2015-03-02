@@ -68,6 +68,7 @@ Andre Master of Universe
 - Add extended auth (safe, restricted, controlled)
 - Add command namespaces
 - Add reloader
+- Add check to dont overwrite a existent route
 
 ##### Running locally
 
