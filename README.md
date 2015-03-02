@@ -65,6 +65,8 @@ Andre Master of Universe
 ##### TODO List
 
 - Add debian package and bricky
+- Add extended auth (safe, restricted, controlled)
+- Add command namespaces
 
 ##### Running locally
 
