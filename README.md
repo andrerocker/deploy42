@@ -67,6 +67,7 @@ Andre Master of Universe
 - Add debian package and bricky
 - Add extended auth (safe, restricted, controlled)
 - Add command namespaces
+- Add reloader
 
 ##### Running locally
 
