@@ -64,6 +64,7 @@ Andre Master of Universe
 
 ##### TODO List
 
+- Add support to logger and levels
 - Add debian package and bricky
 - Add extended auth (safe, restricted, controlled)
 - Add command namespaces
