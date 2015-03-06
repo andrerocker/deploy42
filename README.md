@@ -70,6 +70,7 @@ Andre Master of Universe
 - Add command namespaces
 - Add reloader
 - Add check to dont overwrite a existent route
+- Add support to run in foreground
 
 ##### Running locally
 
