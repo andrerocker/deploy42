@@ -18,12 +18,12 @@ func basicExecuteCommand(input io.Reader, output io.Writer, cmd string) (*exec.C
 	return command, nil
 }
 
-func composedExecuteCommand(input io.Reader, requestOutput io.Writer, cmd string) (*exec.Cmd, error) {
+func composedExecuteCommand(input io.Reader, output io.Writer, cmd string) (*exec.Cmd, error) {
 	command := exec.Command("/bin/bash", "-c", cmd)
 	command.Stdin = input
 
 	commandOutput, err := command.StdoutPipe()
-	go supervisor(command, requestOutput, commandOutput)
+	go supervisor(command, output, commandOutput)
 
 	return command, err
 }

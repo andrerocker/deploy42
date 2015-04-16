@@ -1,6 +1,9 @@
 daemon:
   bind: 127.0.0.1
   port: 8888
+  http:
+    pipe: true
+    vars: true
   load:
     - /etc/deploy42/conf.d/*.yml
 
