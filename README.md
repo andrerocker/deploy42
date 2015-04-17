@@ -73,7 +73,7 @@ Andre Master of Universe
 - [x] Command namespaces
 - [x] Base authetication filters
 - [ ] Base audit filters
-- [ ] Routes reloader
+- [ ] Routes reloader SIG USR2 and HTTP ROUTE
 - [ ] Package with fpm
 - [ ] Logger
 
