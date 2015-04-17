@@ -71,9 +71,10 @@ Andre Master of Universe
 
 - [x] New yaml model
 - [x] Command namespaces
-- [ ] Base authetication filters
+- [x] Base authetication filters
 - [ ] Base audit filters
 - [ ] Routes reloader
+- [ ] Debian package
 
 ##### Running locally
 
