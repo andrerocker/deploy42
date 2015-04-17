@@ -8,7 +8,7 @@ import (
 
 func CasFilter(configFile string) http.Handler {
 	config := config.SimpleYAMLoad(configFile)
-	service := cas.NewService(config["server"], config["service"])
+	service := cas.NewService(config["server"].(string), config["service"].(string))
 
 	return func(request http.Request) {
 		response, err := service.ValidateServiceTicket(request.RequestParameter("ticket"))

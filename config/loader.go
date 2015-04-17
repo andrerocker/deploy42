@@ -14,8 +14,8 @@ func YAMLoad(configFile string) Configuration {
 	return cfg
 }
 
-func SimpleYAMLoad(configFile string) map[string]string {
-	config := make(map[string]string)
+func SimpleYAMLoad(configFile string) map[string]interface{} {
+	config := make(map[string]interface{})
 	content, _ := ioutil.ReadFile(configFile)
 	yaml.Unmarshal(content, &config)
 	return config
