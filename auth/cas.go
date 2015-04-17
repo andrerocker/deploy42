@@ -6,7 +6,7 @@ import (
 	"github.com/lucasuyezu/golang-cas-client"
 )
 
-func CasFilter(configFile string) http.Filter {
+func CasFilter(configFile string) http.Handler {
 	config := config.SimpleYAMLoad(configFile)
 	service := cas.NewService(config["server"], config["service"])
 

@@ -18,13 +18,19 @@ func (self GinAdapter) Start(bindUrl string) {
 	self.engine.Run(bindUrl)
 }
 
-func (self GinAdapter) Use(filter http.Filter) {
-	self.engine.Use(func(context *gin.Context) { filter(NewRequest(context)) })
+func (self GinAdapter) Register(method, endpoint string, handlers []http.Handler) {
+	adapteds := self.buildHandlersList(handlers)
+	self.engine.Handle(strings.ToUpper(method), endpoint, adapteds)
 }
 
-func (self GinAdapter) Register(method, endpoint string, handler http.Handler) {
-	adapted := self.buildHandler(handler)
-	self.engine.Handle(strings.ToUpper(method), endpoint, []gin.HandlerFunc{adapted})
+func (self GinAdapter) buildHandlersList(handlers []http.Handler) []gin.HandlerFunc {
+	ginHandlers := make([]gin.HandlerFunc, 0)
+
+	for _, handler := range handlers {
+		ginHandlers = append(ginHandlers, self.buildHandler(handler))
+	}
+
+	return ginHandlers
 }
 
 func (self GinAdapter) buildHandler(handler http.Handler) func(context *gin.Context) {

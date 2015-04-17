@@ -11,16 +11,17 @@ import (
 )
 
 type Engine struct {
-	http   http.Engine
-	config config.Configuration
+	http    http.Engine
+	config  config.Configuration
+	filters map[string]http.Handler
 }
 
 func New(configFile string) Engine {
-	return Engine{gin.New(), config.New(configFile)}
+	return Engine{gin.New(), config.New(configFile), make(map[string]http.Handler)}
 }
 
-func (self Engine) Use(filter http.Filter) {
-	self.http.Use(filter)
+func (self Engine) RegisterFilter(name string, filter http.Handler) {
+	self.filters[name] = filter
 }
 
 func (self Engine) Draw() {
@@ -29,9 +30,9 @@ func (self Engine) Draw() {
 			for _, verbs := range commands {
 				for verb, command := range verbs {
 					route := self.formattedEndpoint(namespace, groupName)
-					handler := self.wrapValuesHandler(groupName, command.(string))
+					handlers := self.wrapValuesHandler(namespace, groupName, command.(string))
 
-					self.http.Register(verb, route, handler)
+					self.http.Register(verb, route, handlers)
 				}
 			}
 		}
@@ -45,15 +46,16 @@ func (self Engine) Start() {
 	self.http.Start(listen)
 }
 
-func (self Engine) wrapValuesHandler(groupName, commandTemplate string) func(http.Request) {
-	return func(request http.Request) {
+func (self Engine) wrapValuesHandler(namespace config.Namespace, groupName, commandTemplate string) []http.Handler {
+	filters := self.resolveNamespaceFilters(namespace)
+	return append(filters, func(request http.Request) {
 		reader := self.resolveReader(request)
 		target := fmt.Sprintf("{%s}", groupName)
 		content := request.ContextParameter(groupName)
 		compiled := strings.Replace(commandTemplate, target, content, -1)
 
 		command.ExecuteCommand(reader, request.Writer(), compiled)
-	}
+	})
 }
 
 func (self Engine) formattedEndpoint(namespace config.Namespace, groupName string) string {
@@ -70,4 +72,16 @@ func (self Engine) resolveReader(request http.Request) io.Reader {
 	}
 
 	return strings.NewReader("")
+}
+
+func (self Engine) resolveNamespaceFilters(namespace config.Namespace) []http.Handler {
+	filters := make([]http.Handler, 0)
+	for _, filterName := range namespace.Chaining {
+		currentFilter := self.filters[filterName]
+		if currentFilter != nil {
+			filters = append(filters, currentFilter)
+		}
+	}
+
+	return filters
 }

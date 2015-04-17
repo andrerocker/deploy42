@@ -5,9 +5,8 @@ import "io"
 type Handler func(Request)
 
 type Engine interface {
-	Use(Filter)
 	Start(string)
-	Register(string, string, Handler)
+	Register(string, string, []Handler)
 }
 
 type Request interface {
@@ -17,5 +16,3 @@ type Request interface {
 	ContextParameter(string) string
 	RequestParameter(string) string
 }
-
-type Filter func(Request)
