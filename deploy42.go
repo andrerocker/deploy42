@@ -24,13 +24,15 @@ func (self Engine) Use(filter http.Filter) {
 }
 
 func (self Engine) Draw() {
-	for groupName, commands := range self.config.Commands {
-		for _, verbs := range commands {
-			for verb, command := range verbs {
-				route := self.formattedEndpoint(groupName)
-				handler := self.wrapValuesHandler(groupName, command.(string))
+	for _, namespace := range self.config.Namespaces {
+		for groupName, commands := range namespace.Commands {
+			for _, verbs := range commands {
+				for verb, command := range verbs {
+					route := self.formattedEndpoint(namespace, groupName)
+					handler := self.wrapValuesHandler(groupName, command.(string))
 
-				self.http.Register(verb, route, handler)
+					self.http.Register(verb, route, handler)
+				}
 			}
 		}
 	}
@@ -54,12 +56,12 @@ func (self Engine) wrapValuesHandler(groupName, commandTemplate string) func(htt
 	}
 }
 
-func (self Engine) formattedEndpoint(groupName string) string {
+func (self Engine) formattedEndpoint(namespace config.Namespace, groupName string) string {
 	if self.config.Daemon.Http.Vars {
-		return fmt.Sprintf("/%s/*%s", groupName, groupName)
+		return fmt.Sprintf("/%s/%s/*%s", namespace.Endpoint, groupName, groupName)
 	}
 
-	return fmt.Sprintf("/%s", groupName)
+	return fmt.Sprintf("/%s/%s", namespace.Endpoint, groupName)
 }
 
 func (self Engine) resolveReader(request http.Request) io.Reader {

@@ -9,7 +9,7 @@ import (
 
 func YAMLoad(configFile string) Configuration {
 	cfg := loadBase(configFile)
-	mergo.Merge(&cfg.Commands, loadExtensionList(cfg.Daemon.Load))
+	mergo.Merge(&cfg.Namespaces, loadExtensionList(cfg.Daemon.Load))
 
 	return cfg
 }
@@ -38,7 +38,7 @@ func loadExtensionGlob(configFile string) CommandList {
 	commandList := make(CommandList)
 
 	for _, file := range files {
-		internal := loadBase(file).Commands
+		internal := loadBase(file).Namespaces
 		mergo.Merge(&commandList, internal)
 	}
 

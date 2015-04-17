@@ -2,30 +2,25 @@ daemon:
   bind: 127.0.0.1
   port: 8888
   http:
-    pipe: true
-    vars: true
+    pipe: false
+    vars: false
   load:
     - /etc/deploy42/conf.d/*.yml
 
-commands:
-  pkg:
-    - get: apt-cache show {pkg}
-      put: apt-get update && apt-get install -y {pkg}
-      delete: apt-get remove --purge {pkg}
+namespaces:
+  - endpoint: andrerocker/restrict
+    chaining:
+      - cas_ticket
+      - ip_restriction
+      - service_knocking
+    commands:
+      pkg:
+        - get: apt-cache show {pkg}
+          put: apt-get update && apt-get install -y {pkg}
+          delete: apt-get remove --purge {pkg}
 
-  process:
-    - get: ps -ef | grep {process}
-      put: kill {process}
-      delete: kill -9 {process}
-
-  log:
-    - get: tail -f {log}
-
-  echo:
-    - put: cat -
-
-  time:
-    - get: date
-
-  calendar:
-    - get: cal
+  - endpoint: andrerocker
+    commands:
+      log:
+        - get: tail -f /tmp/1
+    
