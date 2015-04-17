@@ -1,6 +1,7 @@
 deploy42
 =========
-Read a YAML and export this as a 'Command as a Service' :p
+Read a YAML and export this as a 'Command as a Service' :p 
+
 https://github.com/andrerocker/deploy42
 
 ##### Example
