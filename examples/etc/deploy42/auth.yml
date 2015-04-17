@@ -1,2 +1,5 @@
 server: https://path.to.cas.server
-service: localhost 
+service: localhost
+
+ip_restriction:
+  - 0.0.0.0/0

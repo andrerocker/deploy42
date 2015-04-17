@@ -16,7 +16,8 @@ func main() {
 	kingpin.Parse()
 
 	deploy42 := deploy42.New(*baseConfig)
-	deploy42.RegisterFilter("cas_tickets", auth.CasFilter(*authConfig))
+	deploy42.Chaining("cas_tickets", auth.CasFilter(*authConfig))
+	deploy42.Chaining("ip_restriction", auth.IpRestrictionFilter(*authConfig))
 	deploy42.Draw()
 	deploy42.Start()
 }
