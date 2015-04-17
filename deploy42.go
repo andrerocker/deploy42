@@ -20,7 +20,7 @@ func New(configFile string) Engine {
 	return Engine{gin.New(), config.New(configFile), make(map[string]http.Handler)}
 }
 
-func (self Engine) RegisterFilter(name string, filter http.Handler) {
+func (self Engine) Chaining(name string, filter http.Handler) {
 	self.filters[name] = filter
 }
 
