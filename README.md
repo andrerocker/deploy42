@@ -74,7 +74,7 @@ Andre Master of Universe
 - [x] Base authetication filters
 - [ ] Base audit filters
 - [ ] Routes reloader
-- [ ] Debian package
+- [ ] package with fpm
 
 ##### Running locally
 
