@@ -74,7 +74,8 @@ Andre Master of Universe
 - [x] Base authetication filters
 - [ ] Base audit filters
 - [ ] Routes reloader
-- [ ] package with fpm
+- [ ] Package with fpm
+- [ ] Logger
 
 ##### Running locally
 
