@@ -2,19 +2,19 @@ package auth
 
 import (
 	"github.com/andrerocker/deploy42/config"
-	"github.com/andrerocker/deploy42/http"
+	"github.com/gin-gonic/gin"
 	"net"
+	"strings"
 )
 
-func IpRestrictionFilter(configFile string) http.Handler {
+func IpRestrictionFilter(configFile string) gin.HandlerFunc {
 	config := config.SimpleYAMLoad(configFile)
 	ranges := resolveCIDRs(config["ip_restriction"].([]interface{}))
 
-	return func(request http.Request) {
-		userIp := net.ParseIP("127.0.0.1") //request.UserIP()
-
-		if isInvalidIp(ranges, userIp) {
-			request.Abort(403)
+	return func(context *gin.Context) {
+		if isInvalidIp(ranges, resolveClientIP(context)) {
+			context.String(403, "unathorized")
+			context.Abort()
 		}
 	}
 }
@@ -38,4 +38,9 @@ func resolveCIDRs(ips []interface{}) []*net.IPNet {
 	}
 
 	return ranges
+}
+
+func resolveClientIP(context *gin.Context) net.IP {
+	clientIp := strings.Split(context.ClientIP(), ":")[0]
+	return net.ParseIP(clientIp)
 }

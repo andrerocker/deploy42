@@ -2,19 +2,22 @@ package auth
 
 import (
 	"github.com/andrerocker/deploy42/config"
-	"github.com/andrerocker/deploy42/http"
-	"github.com/lucasuyezu/golang-cas-client"
+	"github.com/andrerocker/golang-cas-client"
+	"github.com/gin-gonic/gin"
 )
 
-func CasFilter(configFile string) http.Handler {
+func CasFilter(configFile string) gin.HandlerFunc {
 	config := config.SimpleYAMLoad(configFile)
 	service := cas.NewService(config["server"].(string), config["service"].(string))
 
-	return func(request http.Request) {
-		response, err := service.ValidateServiceTicket(request.RequestParameter("ticket"))
+	return func(context *gin.Context) {
+		request := context.Request
+		request.ParseForm()
+		response, err := service.ValidateServiceTicket(request.Form.Get("ticket"))
 
 		if err != nil || !response.Status {
-			request.Abort(401)
+			context.String(401, "unauthorized")
+			context.Abort()
 		}
 	}
 }
