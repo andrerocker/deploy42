@@ -32,7 +32,7 @@ func (self Engine) Draw() {
 					route := self.formattedEndpoint(namespace, groupName)
 					handlers := self.wrapValuesHandler(namespace, groupName, command.(string))
 
-					self.http.Handle(strings.ToUpper(verb), route, handlers)
+					self.http.Handle(strings.ToUpper(verb), route, handlers...)
 				}
 			}
 		}
